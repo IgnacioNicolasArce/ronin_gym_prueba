@@ -1,0 +1,48 @@
+@import "tailwindcss";
+
+@theme {
+  --color-ronin-black: #0a0a0a;
+  --color-ronin-dark: #121212;
+  --color-ronin-card: #1c1c1c;
+  --color-ronin-red: #e63946;
+  --color-ronin-gold: #d4af37;
+  --color-ronin-gold-muted: #b8952d;
+  
+  --font-display: "Outfit", sans-serif;
+  --font-body: "Inter", sans-serif;
+}
+
+:root {
+  background-color: var(--color-ronin-black);
+  color: white;
+  font-family: var(--font-body);
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display);
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: -0.025em;
+}
+
+body {
+  margin: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Glassmorphism utility */
+.glass {
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.ronin-gradient {
+  background: linear-gradient(135deg, var(--color-ronin-red) 0%, #a51d2d 100%);
+}
+
+.gold-gradient {
+  background: linear-gradient(135deg, var(--color-ronin-gold) 0%, var(--color-ronin-gold-muted) 100%);
+}
