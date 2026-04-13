@@ -1,0 +1,309 @@
+.page-perfil { min-height: 100vh; }
+
+.perfil-role-badge {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  letter-spacing: 3px;
+  color: var(--black);
+  background: var(--red);
+  padding: 0.3rem 0.8rem;
+  display: inline-block;
+  margin-top: 0.5rem;
+}
+
+.perfil-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 3rem 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+}
+
+/* HONOR */
+.honor-section {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+
+.honor-card {
+  background: var(--black-2);
+  border: 1px solid var(--gray);
+  border-left: 3px solid var(--red);
+  padding: 2rem;
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+}
+
+.honor-kanji-big {
+  font-family: var(--font-serif);
+  font-size: 6rem;
+  color: var(--red-dim);
+  font-weight: 900;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.honor-info { flex: 1; }
+
+.honor-label {
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 3px;
+  color: var(--red);
+  text-transform: uppercase;
+  display: block;
+  margin-bottom: 0.4rem;
+}
+
+.honor-points {
+  font-family: var(--font-display);
+  font-size: 3.5rem;
+  color: var(--white);
+  line-height: 1;
+}
+
+.honor-level-name {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 3px;
+  color: var(--white-dim);
+  text-transform: uppercase;
+  margin-bottom: 0.75rem;
+}
+
+.honor-progress-bar {
+  width: 100%;
+  height: 3px;
+  background: var(--black-4);
+  border-radius: 2px;
+  overflow: hidden;
+  margin-bottom: 0.4rem;
+}
+
+.honor-progress-fill {
+  height: 100%;
+  background: var(--red);
+  transition: width 1s ease;
+}
+
+.honor-next {
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  color: var(--gray-light);
+  letter-spacing: 1px;
+}
+
+.honor-levels-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  background: var(--gray);
+}
+
+.level-item {
+  background: var(--black);
+  padding: 0.85rem 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  transition: background 0.2s;
+}
+
+.level-item.current { background: rgba(204,26,26,0.08); }
+
+.level-k {
+  font-family: var(--font-serif);
+  font-size: 1.25rem;
+  color: var(--red-dim);
+  width: 28px;
+  text-align: center;
+}
+
+.level-item.current .level-k { color: var(--red); }
+
+.level-n {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 2px;
+  color: var(--white-dim);
+  flex: 1;
+}
+
+.level-item.current .level-n { color: var(--white); }
+
+.level-pts {
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  color: var(--gray-light);
+  letter-spacing: 1px;
+}
+
+/* INFO GRID */
+.perfil-info-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  background: var(--gray);
+}
+
+.info-card {
+  background: var(--black-2);
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.info-label {
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 3px;
+  color: var(--gray-light);
+  text-transform: uppercase;
+}
+
+.info-value {
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  color: var(--white);
+  letter-spacing: 1px;
+}
+
+.info-value.red { color: var(--red); }
+
+/* RUTINA */
+.subsection-title {
+  font-family: var(--font-display);
+  font-size: 2rem;
+  letter-spacing: 5px;
+  color: var(--white);
+  margin-bottom: 0.5rem;
+}
+
+.my-routine-name {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 2px;
+  color: var(--red);
+  margin-bottom: 1.5rem;
+}
+
+.my-routine-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 1px;
+  background: var(--gray);
+}
+
+.my-routine-day {
+  background: var(--black-2);
+  padding: 1.5rem;
+}
+
+.routine-day-label {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  letter-spacing: 3px;
+  color: var(--red);
+  text-transform: uppercase;
+  display: block;
+  margin-bottom: 0.75rem;
+}
+
+.routine-ex-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.routine-ex-list li {
+  font-family: var(--font-serif);
+  font-size: 0.8rem;
+  color: var(--white-dim);
+  padding-left: 0.75rem;
+  border-left: 2px solid var(--black-4);
+  font-weight: 300;
+}
+
+.activity-list {
+  margin-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.activity-title {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 2px;
+  color: var(--red);
+  text-transform: uppercase;
+}
+
+.activity-row {
+  background: var(--black-2);
+  border: 1px solid var(--black-4);
+  padding: 0.55rem 0.8rem;
+  display: flex;
+  justify-content: space-between;
+  gap: 0.5rem;
+  font-size: 0.75rem;
+  color: var(--white-dim);
+}
+
+.activity-empty {
+  font-size: 0.75rem;
+  color: var(--gray-light);
+}
+
+.marks-form {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 0.6rem;
+  margin-bottom: 1rem;
+}
+
+.marks-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 1px;
+  background: var(--gray);
+}
+
+.mark-card {
+  background: var(--black-2);
+  padding: 0.8rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.mark-exercise {
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--gray-light);
+}
+
+.mark-card strong {
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  color: var(--white);
+}
+
+.mark-card span {
+  font-size: 0.72rem;
+  color: var(--white-dim);
+}
+
+@media (max-width: 900px) {
+  .honor-section { grid-template-columns: 1fr; }
+  .perfil-info-grid { grid-template-columns: 1fr; }
+  .marks-form { grid-template-columns: 1fr; }
+  .activity-row { flex-direction: column; }
+}

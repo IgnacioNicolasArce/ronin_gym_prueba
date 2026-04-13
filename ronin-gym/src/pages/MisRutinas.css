@@ -1,0 +1,269 @@
+.page-mis-rutinas { min-height: 100vh; }
+
+.subsection-title {
+  font-family: var(--font-display);
+  font-size: 2rem;
+  letter-spacing: 2px;
+  color: var(--white);
+  margin-bottom: 0.9rem;
+}
+
+.routine-meta {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  background: var(--gray);
+  margin-bottom: 2rem;
+}
+
+.routine-meta-item {
+  background: var(--black-2);
+  padding: 1.25rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.meta-label {
+  font-family: var(--font-mono);
+  font-size: 0.58rem;
+  letter-spacing: 3px;
+  color: var(--gray-light);
+  text-transform: uppercase;
+}
+
+.meta-value {
+  font-family: var(--font-display);
+  font-size: 1rem;
+  color: var(--white);
+  letter-spacing: 1px;
+}
+
+.full-routine-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.library-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 1px;
+  background: var(--gray);
+}
+
+.library-card {
+  background: var(--black-2);
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.library-card h3 {
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  color: var(--white);
+}
+
+.library-card p {
+  font-size: 0.8rem;
+  color: var(--gray-light);
+}
+
+.library-card span {
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 1px;
+  color: var(--white-dim);
+}
+
+.library-actions {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: auto;
+}
+
+.editor-box {
+  border: 1px solid var(--gray);
+  background: var(--black-2);
+  border-left: 3px solid var(--red);
+  padding: 1rem;
+}
+
+.editor-head-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  margin-bottom: 0.7rem;
+}
+
+.editor-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.6rem;
+  margin-bottom: 0.8rem;
+}
+
+.editor-textarea {
+  min-height: 90px;
+  resize: vertical;
+  grid-column: 1 / -1;
+}
+
+.split-editor-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 0.8rem;
+}
+
+.split-edit-card {
+  border: 1px solid var(--black-4);
+  background: var(--black-3);
+  padding: 0.7rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.editor-actions {
+  margin-top: 0.9rem;
+  display: flex;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+
+.routine-inline-actions {
+  display: flex;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem 1rem;
+  flex-wrap: wrap;
+}
+
+.pending-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+}
+
+.pending-card {
+  border: 1px solid var(--gray);
+  background: var(--black-2);
+  padding: 0.9rem;
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  align-items: center;
+}
+
+.pending-card strong {
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+}
+
+.pending-card p {
+  font-size: 0.75rem;
+  color: var(--gray-light);
+}
+
+.empty-text {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--gray-light);
+}
+
+.btn-mini {
+  font-family: var(--font-mono);
+  font-size: 0.58rem;
+  color: var(--white-dim);
+  border: 1px solid var(--gray);
+  padding: 0.25rem 0.5rem;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  transition: all 0.2s;
+}
+
+.btn-mini:hover {
+  border-color: var(--red);
+  color: var(--red);
+}
+
+.full-day-card {
+  background: var(--black-2);
+  border: 1px solid var(--black-4);
+  overflow: hidden;
+}
+
+.full-day-header {
+  background: var(--black-3);
+  padding: 1rem 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  border-bottom: 1px solid var(--black-4);
+}
+
+.full-day-name {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  letter-spacing: 3px;
+  color: var(--white);
+}
+
+.full-day-focus {
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 2px;
+  color: var(--red);
+  text-transform: uppercase;
+}
+
+.exercise-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.exercise-table th {
+  font-family: var(--font-mono);
+  font-size: 0.58rem;
+  letter-spacing: 3px;
+  color: var(--gray-light);
+  text-transform: uppercase;
+  text-align: left;
+  padding: 0.75rem 1.5rem;
+  border-bottom: 1px solid var(--black-4);
+  background: var(--black-3);
+}
+
+.exercise-table td {
+  font-family: var(--font-serif);
+  font-size: 0.82rem;
+  color: var(--white-dim);
+  padding: 0.85rem 1.5rem;
+  border-bottom: 1px solid var(--black-3);
+  font-weight: 300;
+}
+
+.exercise-table td:first-child {
+  color: var(--white);
+  font-weight: 400;
+}
+
+.exercise-table tr:last-child td {
+  border-bottom: none;
+}
+
+.exercise-table tr:hover td {
+  background: rgba(255,255,255,0.02);
+}
+
+@media (max-width: 700px) {
+  .routine-meta { grid-template-columns: 1fr; }
+  .editor-grid { grid-template-columns: 1fr; }
+  .pending-card {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .exercise-table th:nth-child(4),
+  .exercise-table td:nth-child(4) { display: none; }
+}

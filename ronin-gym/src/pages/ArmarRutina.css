@@ -1,0 +1,188 @@
+.page-armar { min-height: 100vh; }
+
+.armar-config {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  margin-bottom: 2rem;
+}
+
+.config-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.config-label {
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 3px;
+  color: var(--red);
+  text-transform: uppercase;
+}
+
+.config-input {
+  background: var(--black-2);
+  border: 1px solid var(--gray);
+  color: var(--white);
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  padding: 0.85rem 1rem;
+  outline: none;
+  transition: border-color 0.2s;
+  width: 100%;
+}
+
+.config-input:focus { border-color: var(--red); }
+.config-input::placeholder { color: var(--gray-light); }
+
+.days-selector {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.day-opt {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  letter-spacing: 2px;
+  color: var(--white-dim);
+  background: var(--black-2);
+  border: 1px solid var(--gray);
+  padding: 0.6rem 1.1rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.day-opt:hover { border-color: var(--white-dim); }
+.day-opt.active { background: var(--red); border-color: var(--red); color: var(--black); }
+
+/* Days builder */
+.days-builder {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.day-builder-card {
+  background: var(--black-2);
+  border: 1px solid var(--black-4);
+  overflow: hidden;
+}
+
+.day-builder-header {
+  background: var(--black-3);
+  padding: 1rem 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--black-4);
+}
+
+.day-builder-name {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  letter-spacing: 3px;
+  color: var(--white);
+}
+
+.day-builder-count {
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 2px;
+  color: var(--red);
+}
+
+.builder-section {
+  padding: 1.25rem 1.5rem;
+  border-bottom: 1px solid var(--black-3);
+}
+
+.builder-section-label {
+  font-family: var(--font-mono);
+  font-size: 0.58rem;
+  letter-spacing: 3px;
+  color: var(--gray-light);
+  text-transform: uppercase;
+  display: block;
+  margin-bottom: 0.75rem;
+}
+
+.muscle-chips-row,
+.ex-chips-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.muscle-chip-btn,
+.ex-chip-btn {
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 1px;
+  color: var(--white-dim);
+  background: var(--black);
+  border: 1px solid var(--gray);
+  padding: 0.3rem 0.7rem;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.muscle-chip-btn:hover,
+.ex-chip-btn:hover { border-color: var(--white-dim); color: var(--white); }
+
+.muscle-chip-btn.active { background: var(--red); border-color: var(--red); color: var(--black); }
+.ex-chip-btn.active { background: rgba(204,26,26,0.15); border-color: var(--red); color: var(--red); }
+
+.selected-exercises {
+  padding: 1.25rem 1.5rem;
+}
+
+.selected-ex-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.selected-ex-list li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--white-dim);
+  padding: 0.5rem 0.75rem;
+  background: var(--black);
+  border: 1px solid var(--black-4);
+}
+
+.ex-remove {
+  font-size: 0.6rem;
+  color: var(--gray-light);
+  cursor: pointer;
+  background: none;
+  border: none;
+  transition: color 0.2s;
+}
+
+.ex-remove:hover { color: var(--red); }
+
+.armar-footer {
+  margin-top: 2rem;
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.saved-msg {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 2px;
+  color: #22c55e;
+  animation: fadeIn 0.3s ease;
+}
+
+@media (max-width: 700px) {
+  .armar-config { grid-template-columns: 1fr; }
+  .days-selector { flex-wrap: wrap; }
+}

@@ -1,0 +1,133 @@
+.footer {
+  position: relative;
+  background: var(--black-2);
+  border-top: 1px solid var(--gray);
+  overflow: hidden;
+  margin-top: 6rem;
+}
+
+.footer-kanji-bg {
+  position: absolute;
+  bottom: -40px;
+  right: -20px;
+  font-family: var(--font-serif);
+  font-size: 18rem;
+  color: rgba(255,255,255,0.02);
+  font-weight: 900;
+  pointer-events: none;
+  line-height: 1;
+}
+
+.footer-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 4rem 2rem 2rem;
+  display: grid;
+  grid-template-columns: 1.5fr 1fr 1fr;
+  gap: 3rem;
+}
+
+.footer-brand {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.footer-logo-kanji {
+  font-family: var(--font-serif);
+  font-size: 2.5rem;
+  color: var(--red);
+  font-weight: 700;
+  line-height: 1;
+}
+
+.footer-logo-text {
+  font-family: var(--font-display);
+  font-size: 2rem;
+  letter-spacing: 6px;
+  color: var(--white);
+}
+
+.footer-tagline {
+  font-family: var(--font-serif);
+  font-size: 0.75rem;
+  color: var(--gray-light);
+  margin-top: 0.25rem;
+}
+
+.footer-tagline-es {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  color: var(--gray-light);
+  letter-spacing: 1px;
+}
+
+.footer-section-title {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--red);
+  margin-bottom: 1rem;
+}
+
+.footer-links, .footer-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.footer-link {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--white-dim);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: color 0.2s;
+  text-decoration: none;
+}
+
+.footer-link:hover {
+  color: var(--white);
+}
+
+.footer-icon {
+  color: var(--red-dim);
+  font-size: 0.8rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.footer-bottom {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem 2rem;
+}
+
+.footer-bottom-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 0.5rem;
+}
+
+.footer-copy {
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  color: var(--gray-light);
+  letter-spacing: 1px;
+}
+
+@media (max-width: 768px) {
+  .footer-inner {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+  .footer-bottom-row {
+    flex-direction: column;
+    gap: 0.5rem;
+    align-items: flex-start;
+  }
+}

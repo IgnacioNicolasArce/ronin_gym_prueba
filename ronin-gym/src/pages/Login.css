@@ -1,0 +1,158 @@
+.page-login {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 5rem 1.5rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.login-bg-kanji {
+  position: fixed;
+  font-family: var(--font-serif);
+  font-size: 40rem;
+  color: rgba(255,255,255,0.02);
+  font-weight: 900;
+  pointer-events: none;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  line-height: 1;
+}
+
+.login-box {
+  background: var(--black-2);
+  border: 1px solid var(--gray);
+  border-top: 3px solid var(--red);
+  padding: 3rem;
+  width: 100%;
+  max-width: 520px;
+  position: relative;
+  z-index: 2;
+  animation: fadeIn 0.5s ease;
+}
+
+.login-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.logo-kanji-login {
+  font-family: var(--font-serif);
+  font-size: 2rem;
+  color: var(--red);
+  font-weight: 700;
+}
+
+.logo-text-login {
+  font-family: var(--font-display);
+  font-size: 2.5rem;
+  letter-spacing: 6px;
+  color: var(--white);
+}
+
+.login-title {
+  font-family: var(--font-display);
+  font-size: 2rem;
+  color: var(--white);
+  letter-spacing: 6px;
+  margin-bottom: 0.4rem;
+  margin-top: 1.5rem;
+}
+
+.login-sub {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  color: var(--gray-light);
+  letter-spacing: 2px;
+  margin-bottom: 2rem;
+}
+
+.role-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-bottom: 2rem;
+}
+
+.role-card {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  padding: 1.25rem 1.5rem;
+  background: var(--black);
+  border: 1px solid var(--black-4);
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.2s;
+  width: 100%;
+}
+
+.role-card:hover { border-color: var(--gray); }
+.role-card.active { border-color: var(--red); background: rgba(204,26,26,0.05); }
+
+.role-kanji {
+  font-family: var(--font-serif);
+  font-size: 2rem;
+  color: var(--red-dim);
+  flex-shrink: 0;
+  line-height: 1;
+  transition: color 0.2s;
+}
+
+.role-card.active .role-kanji { color: var(--red); }
+
+.role-label {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 3px;
+  color: var(--white);
+  display: block;
+  margin-bottom: 0.2rem;
+}
+
+.role-desc {
+  font-family: var(--font-serif);
+  font-size: 0.75rem;
+  color: var(--gray-light);
+  font-weight: 300;
+  display: block;
+}
+
+.btn-login-full {
+  width: 100%;
+  padding: 1.1rem;
+  background: var(--red);
+  color: var(--black);
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  border: 1px solid var(--red);
+  cursor: pointer;
+  transition: all 0.2s;
+  margin-bottom: 1rem;
+}
+
+.btn-login-full:hover:not(.disabled) {
+  background: transparent;
+  color: var(--red);
+}
+
+.btn-login-full.disabled {
+  background: var(--black-4);
+  border-color: var(--gray);
+  color: var(--gray-light);
+  cursor: not-allowed;
+}
+
+.login-note {
+  font-family: var(--font-mono);
+  font-size: 0.58rem;
+  color: var(--gray-light);
+  letter-spacing: 1px;
+  text-align: center;
+}
