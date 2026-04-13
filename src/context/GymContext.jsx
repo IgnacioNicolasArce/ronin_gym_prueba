@@ -4,11 +4,89 @@ const GymContext = createContext();
 
 export const useGym = () => useContext(GymContext);
 
+/** Medios de pago disponibles al registrar una cuota mensual */
+export const PAYMENT_METHOD_OPTIONS = [
+    'Efectivo',
+    'Transferencia',
+];
+
+/** Ejercicios fijos para PRs en perfil de socio */
+export const PR_EXERCISES = [
+    'Press Plano',
+    'Press Inclinado',
+    'Peso Muerto',
+    'Press Militar',
+    'Sentadilla',
+    'Hip trust',
+    'Curl con barra',
+    'Prensa',
+    'Extension con polea',
+    'Dominadas',
+    'Jalones al pecho',
+    'Remo',
+];
+
+/** PR guardado como { weight, reps } (strings). Migra valores viejos tipo "100 kg". */
+export const normalizePrEntry = (raw) => {
+    if (raw == null) return null;
+    if (typeof raw === 'object' && !Array.isArray(raw) && ('weight' in raw || 'reps' in raw)) {
+        const weight = raw.weight != null ? String(raw.weight).trim() : '';
+        const reps = raw.reps != null ? String(raw.reps).trim() : '';
+        if (!weight && !reps) return null;
+        return { weight, reps };
+    }
+    if (typeof raw === 'string') {
+        const s = raw.trim();
+        if (!s) return null;
+        const m = s.match(/^([\d.,]+)\s*(.*)$/);
+        if (m) return { weight: m[1].replace(',', '.'), reps: '' };
+        return { weight: s, reps: '' };
+    }
+    return null;
+};
+
+const normalizePrsObject = (prs) => {
+    const src = prs && typeof prs === 'object' && !Array.isArray(prs) ? prs : {};
+    const out = {};
+    for (const [key, val] of Object.entries(src)) {
+        const entry = normalizePrEntry(val);
+        if (entry) out[key] = entry;
+    }
+    return out;
+};
+
+const normalizeMember = (m) => ({
+    ...m,
+    paymentMethod: m.paymentMethod || 'Sin definir',
+    renewalHistory: Array.isArray(m.renewalHistory) ? m.renewalHistory : [],
+    prs: normalizePrsObject(m.prs),
+});
+
+/** Convierte "YYYY-MM-DD" (input date) o ISO en inicio de día local (mediodía → ISO estable). */
+export const periodStartToIso = (value) => {
+    if (!value) return null;
+    if (typeof value === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(value.trim())) {
+        const [y, mo, d] = value.trim().split('-').map(Number);
+        return new Date(y, mo - 1, d, 12, 0, 0, 0).toISOString();
+    }
+    const t = new Date(value);
+    if (Number.isNaN(t.getTime())) return null;
+    return new Date(t.getFullYear(), t.getMonth(), t.getDate(), 12, 0, 0, 0).toISOString();
+};
+
 export const GymProvider = ({ children }) => {
     // Members with enhanced fields (honorPoints, PRs)
     const [members, setMembers] = useState(() => {
         const saved = localStorage.getItem('ronin_members_v2');
-        return saved ? JSON.parse(saved) : [
+        if (saved) {
+            try {
+                const parsed = JSON.parse(saved);
+                return Array.isArray(parsed) ? parsed.map(normalizeMember) : [];
+            } catch {
+                return [];
+            }
+        }
+        return [
             {
                 id: '1',
                 name: 'Juan Perez',
@@ -18,18 +96,27 @@ export const GymProvider = ({ children }) => {
                 plan: 'Musculación',
                 honorPoints: 150,
                 lastActivityDate: new Date().toISOString(),
-                prs: { 'Press de Banca': '100kg', 'Sentadilla': '140kg', 'Peso Muerto': '180kg' }
+                renewalHistory: [],
+                prs: {
+                    'Press Plano': { weight: '100', reps: '5' },
+                    'Sentadilla': { weight: '140', reps: '3' },
+                    'Peso Muerto': { weight: '180', reps: '1' },
+                }
             },
             {
                 id: '2',
                 name: 'Maria Garcia',
                 dni: '87654321',
                 lastPaymentDate: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString(),
-                paymentMethod: 'Mercado Pago',
+                paymentMethod: 'Transferencia',
                 plan: 'Personalizado',
                 honorPoints: 80,
                 lastActivityDate: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString(),
-                prs: { 'Press de Banca': '40kg', 'Sentadilla': '60kg' }
+                renewalHistory: [],
+                prs: {
+                    'Press Plano': { weight: '40', reps: '8' },
+                    'Sentadilla': { weight: '60', reps: '10' },
+                }
             }
         ];
     });
@@ -66,24 +153,31 @@ export const GymProvider = ({ children }) => {
         localStorage.setItem('ronin_inventory', JSON.stringify(inventory));
     }, [inventory]);
 
-    const getMemberStatus = (lastPaymentDate) => {
-        const today = new Date();
-        const lastPayment = new Date(lastPaymentDate);
-        const diffTime = Math.abs(today - lastPayment);
-        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-
-        if (diffDays <= 28) return 'green';
-        if (diffDays <= 31) return 'yellow';
-        return 'red';
-    };
-
-    const getDaysRemaining = (lastPaymentDate) => {
+    const getExpirationDate = (lastPaymentDate) => {
         const lastPayment = new Date(lastPaymentDate);
         const expiration = new Date(lastPayment);
         expiration.setDate(expiration.getDate() + 31);
+        return expiration;
+    };
+
+    /** Días hasta el vencimiento (negativo si ya venció). No usar Math.abs: evita fallos con cuotas apiladas o lastPayment en el futuro. */
+    const getDaysUntilExpiration = (lastPaymentDate) => {
+        const expiration = getExpirationDate(lastPaymentDate);
         const today = new Date();
         const diffTime = expiration - today;
-        return Math.max(0, Math.ceil(diffTime / (1000 * 60 * 60 * 24)));
+        return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    };
+
+    /** Activo / por vencer / vencido según la fecha de fin de cuota, no según días desde el último pago. */
+    const getMemberStatus = (lastPaymentDate) => {
+        const daysLeft = getDaysUntilExpiration(lastPaymentDate);
+        if (daysLeft < 0) return 'red';
+        if (daysLeft <= 7) return 'yellow';
+        return 'green';
+    };
+
+    const getDaysRemaining = (lastPaymentDate) => {
+        return Math.max(0, getDaysUntilExpiration(lastPaymentDate));
     };
 
     const markAttendance = (id) => {
@@ -128,25 +222,44 @@ export const GymProvider = ({ children }) => {
         ));
     };
 
-    const renewMember = (id) => {
+    const updateMemberPr = (memberId, exerciseName, { weight, reps }) => {
+        const w = weight != null ? String(weight).trim() : '';
+        const r = reps != null ? String(reps).trim() : '';
         setMembers(prev => prev.map(m => {
-            if (m.id === id) {
-                const currentDate = new Date();
-                const lastDate = new Date(m.lastPaymentDate);
-                const expirationDate = new Date(lastDate);
-                expirationDate.setDate(expirationDate.getDate() + 31);
+            if (m.id !== memberId) return m;
+            const next = { ...(m.prs || {}) };
+            if (!w && !r) delete next[exerciseName];
+            else next[exerciseName] = { weight: w, reps: r };
+            return { ...m, prs: next };
+        }));
+    };
 
-                let newDate;
-                if (currentDate > expirationDate) {
-                    newDate = currentDate.toISOString();
-                } else {
-                    const adjustedDate = new Date(m.lastPaymentDate);
-                    adjustedDate.setDate(adjustedDate.getDate() + 31);
-                    newDate = adjustedDate.toISOString();
-                }
-                return { ...m, lastPaymentDate: newDate };
-            }
-            return m;
+    /**
+     * Registra una cuota mensual. `periodStart` = primer día en que rige la mensualidad (ej. reingreso).
+     * Puede ser "YYYY-MM-DD" o ISO; si falta o es inválido, usa hoy.
+     */
+    const renewMember = (id, paymentMethod, periodStart) => {
+        const todayLocalNoon = () => {
+            const n = new Date();
+            return new Date(n.getFullYear(), n.getMonth(), n.getDate(), 12, 0, 0, 0).toISOString();
+        };
+        const startIso = periodStartToIso(periodStart) || todayLocalNoon();
+
+        setMembers(prev => prev.map(m => {
+            if (m.id !== id) return m;
+
+            const method = (paymentMethod && String(paymentMethod).trim())
+                ? paymentMethod.trim()
+                : (m.paymentMethod || 'Sin definir');
+            const registeredAt = new Date().toISOString();
+            const entry = { date: registeredAt, method, periodStart: startIso };
+
+            return {
+                ...m,
+                lastPaymentDate: startIso,
+                paymentMethod: method,
+                renewalHistory: [...(m.renewalHistory || []), entry],
+            };
         }));
     };
 
@@ -159,8 +272,11 @@ export const GymProvider = ({ children }) => {
             renewMember,
             markAttendance,
             getMemberStatus,
+            getExpirationDate,
             getDaysRemaining,
-            updateInventory
+            updateInventory,
+            updateMemberPr,
+            PR_EXERCISES
         }}>
             {children}
         </GymContext.Provider>
