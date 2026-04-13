@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import { useGym } from '../context/GymContext';
-import { Search, UserCheck, RefreshCw, Plus, Users, Clock, AlertTriangle, CheckCircle2, TrendingUp, Package, DollarSign, BarChart3, X } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { useGym, PAYMENT_METHOD_OPTIONS } from '../context/GymContext';
+import { Search, UserCheck, RefreshCw, Users, Clock, AlertTriangle, CheckCircle2, TrendingUp, Package, DollarSign, BarChart3, CalendarDays } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const Dashboard = () => {
@@ -10,7 +10,22 @@ const Dashboard = () => {
     const [foundMember, setFoundMember] = useState(null);
     const [message, setMessage] = useState(null);
     const [renewModal, setRenewModal] = useState(null);
+    const [renewPaymentMethod, setRenewPaymentMethod] = useState(PAYMENT_METHOD_OPTIONS[0]);
+    const [renewPeriodStart, setRenewPeriodStart] = useState('');
     const [activeTab, setActiveTab] = useState('socios'); // 'socios' or 'finanzas' or 'inventario'
+
+    const todayYmd = () => {
+        const n = new Date();
+        return `${n.getFullYear()}-${String(n.getMonth() + 1).padStart(2, '0')}-${String(n.getDate()).padStart(2, '0')}`;
+    };
+
+    useEffect(() => {
+        if (!renewModal) return;
+        const current = renewModal.paymentMethod;
+        const match = PAYMENT_METHOD_OPTIONS.find((o) => o === current);
+        setRenewPaymentMethod(match || PAYMENT_METHOD_OPTIONS[0]);
+        setRenewPeriodStart(todayYmd());
+    }, [renewModal]);
 
     const stats = {
         total: members.length,
@@ -39,8 +54,8 @@ const Dashboard = () => {
 
     const handleRenewConfirm = () => {
         if (!renewModal) return;
-        renewMember(renewModal.id);
-        setMessage(`Membresía renovada para ${renewModal.name}`);
+        renewMember(renewModal.id, renewPaymentMethod, renewPeriodStart || todayYmd());
+        setMessage(`Cuota registrada para ${renewModal.name} — rige desde ${renewPeriodStart || todayYmd()}`);
         setRenewModal(null);
         setTimeout(() => setMessage(null), 3000);
     };
@@ -64,6 +79,18 @@ const Dashboard = () => {
 
     return (
         <div className="pt-28 pb-20 px-6 max-w-7xl mx-auto">
+            <AnimatePresence>
+                {message && (
+                    <motion.div
+                        initial={{ opacity: 0, y: -12 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -12 }}
+                        className="fixed top-24 left-1/2 -translate-x-1/2 z-[110] px-6 py-3 rounded-2xl bg-ronin-red text-white text-sm font-bold shadow-lg shadow-ronin-red/30 max-w-[90vw] text-center"
+                    >
+                        {message}
+                    </motion.div>
+                )}
+            </AnimatePresence>
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-10">
                 <div>
                     <h1 className="text-4xl font-black mb-1 italic uppercase tracking-tighter">Panel <span className="text-ronin-red">Estratégico</span></h1>
@@ -171,7 +198,7 @@ const Dashboard = () => {
                                         <thead>
                                             <tr className="text-[10px] font-black text-zinc-600 uppercase tracking-widest border-b border-white/5">
                                                 <th className="text-left pb-4">Guerrero</th>
-                                                <th className="text-left pb-4">Pago / Modo</th>
+                                                <th className="text-left pb-4">Cuota (inicio · vence) / Pago</th>
                                                 <th className="text-left pb-4">Estado</th>
                                                 <th className="text-right pb-4">Honor</th>
                                             </tr>
@@ -184,8 +211,14 @@ const Dashboard = () => {
                                                         <div className="text-[10px] text-zinc-600">DNI: {m.dni}</div>
                                                     </td>
                                                     <td className="py-4">
-                                                        <div className="text-xs font-medium text-zinc-400">{getExpirationDate(m.lastPaymentDate).toLocaleDateString()}</div>
-                                                        <div className="text-[9px] text-ronin-gold font-bold uppercase">{m.paymentMethod}</div>
+                                                        <div className="text-[10px] text-zinc-500 mb-0.5">
+                                                            Desde <span className="text-zinc-300 font-semibold">{new Date(m.lastPaymentDate).toLocaleDateString()}</span>
+                                                            {' · '}
+                                                            vence <span className="text-zinc-300 font-semibold">{getExpirationDate(m.lastPaymentDate).toLocaleDateString()}</span>
+                                                        </div>
+                                                        <div className="text-[9px] text-ronin-gold font-bold uppercase" title="Medio registrado al último pago de cuota">
+                                                            {m.paymentMethod}
+                                                        </div>
                                                     </td>
                                                     <td className="py-4"><StatusBadge date={m.lastPaymentDate} /></td>
                                                     <td className="py-4 text-right px-2">
@@ -241,18 +274,14 @@ const Dashboard = () => {
                         <DollarSign size={64} className="text-ronin-gold mb-6 animate-pulse" />
                         <h2 className="text-3xl font-black mb-4 italic uppercase tracking-tighter">Bóveda de Honor</h2>
                         <p className="text-zinc-500 max-w-md mb-8">Auditoría completa de ingresos por método de pago y socio. Módulo bajo protección de datos.</p>
-                        <div className="grid grid-cols-3 gap-8 w-full max-w-lg">
+                        <div className="grid grid-cols-2 gap-8 w-full max-w-md">
                             <div>
                                 <div className="text-[10px] text-zinc-600 font-black uppercase mb-1">Efectivo</div>
                                 <div className="text-xl font-bold font-mono">$45.000</div>
                             </div>
                             <div>
-                                <div className="text-[10px] text-zinc-600 font-black uppercase mb-1">Transf.</div>
+                                <div className="text-[10px] text-zinc-600 font-black uppercase mb-1">Transferencia</div>
                                 <div className="text-xl font-bold font-mono">$32.000</div>
-                            </div>
-                            <div>
-                                <div className="text-[10px] text-zinc-600 font-black uppercase mb-1">M. Pago</div>
-                                <div className="text-xl font-bold font-mono">$105.000</div>
                             </div>
                         </div>
                     </motion.div>
@@ -264,11 +293,46 @@ const Dashboard = () => {
                     <div className="fixed inset-0 z-[100] flex items-center justify-center p-6">
                         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setRenewModal(null)} className="absolute inset-0 bg-black/80 backdrop-blur-sm" />
                         <motion.div initial={{ opacity: 0, scale: 0.9, y: 20 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.9, y: 20 }} className="relative w-full max-w-md glass p-8 rounded-[40px] border border-white/10 shadow-2xl">
-                            <h2 className="text-2xl font-black mb-2 italic uppercase">Confirmar Acción</h2>
-                            <p className="text-zinc-400 text-sm mb-8">¿Deseas registrar la renovación de {renewModal.name}?</p>
+                            <h2 className="text-2xl font-black mb-2 italic uppercase">Renovar cuota</h2>
+                            <p className="text-zinc-400 text-sm mb-6">
+                                Registrá la mensualidad de <span className="text-white font-semibold">{renewModal.name}</span>. Podés fijar desde qué día cuenta la cuota (reingresos, alta nueva, etc.).
+                            </p>
+                            <div className="mb-6">
+                                <label className="flex items-center gap-2 text-[10px] font-black text-zinc-500 uppercase tracking-widest mb-3">
+                                    <CalendarDays size={14} className="text-ronin-red" />
+                                    La mensualidad arranca el
+                                </label>
+                                <input
+                                    type="date"
+                                    value={renewPeriodStart}
+                                    onChange={(e) => setRenewPeriodStart(e.target.value)}
+                                    className="w-full bg-white/5 border border-white/10 rounded-2xl px-4 py-3 text-sm text-white focus:outline-none focus:border-ronin-red [color-scheme:dark]"
+                                />
+                                <p className="text-[11px] text-zinc-600 mt-2 leading-snug">
+                                    Por defecto es hoy. Si la persona volvió después de meses sin venir, elegí el día en que retoma o en que abonó la nueva cuota.
+                                </p>
+                            </div>
+                            <div className="mb-8">
+                                <label className="block text-[10px] font-black text-zinc-500 uppercase tracking-widest mb-3">Forma de pago de esta cuota</label>
+                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                                    {PAYMENT_METHOD_OPTIONS.map((opt) => (
+                                        <button
+                                            key={opt}
+                                            type="button"
+                                            onClick={() => setRenewPaymentMethod(opt)}
+                                            className={`py-3 px-3 rounded-xl text-left text-xs font-bold border transition-all ${renewPaymentMethod === opt
+                                                ? 'border-ronin-red bg-ronin-red/15 text-white'
+                                                : 'border-white/10 bg-white/[0.03] text-zinc-400 hover:border-white/20 hover:text-zinc-200'
+                                                }`}
+                                        >
+                                            {opt}
+                                        </button>
+                                    ))}
+                                </div>
+                            </div>
                             <div className="flex gap-4">
                                 <button onClick={() => setRenewModal(null)} className="flex-1 py-4 bg-white/5 rounded-2xl font-black uppercase text-[10px] tracking-widest hover:bg-white/10 transition-colors">Cancelar</button>
-                                <button onClick={handleRenewConfirm} className="flex-1 py-4 ronin-gradient rounded-2xl font-black uppercase text-[10px] tracking-widest shadow-lg shadow-ronin-red/20">Renovar</button>
+                                <button onClick={handleRenewConfirm} className="flex-1 py-4 ronin-gradient rounded-2xl font-black uppercase text-[10px] tracking-widest shadow-lg shadow-ronin-red/20">Registrar pago</button>
                             </div>
                         </motion.div>
                     </div>

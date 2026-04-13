@@ -1,5 +1,31 @@
 import React from 'react';
-import { AtSign, Mail, Phone, MapPin } from 'lucide-react';
+import { Mail, Phone, MapPin, ExternalLink } from 'lucide-react';
+
+const InstagramIcon = ({ className, size = 16 }) => (
+    <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width={size}
+        height={size}
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        className={className}
+        aria-hidden
+    >
+        <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
+        <circle cx="12" cy="12" r="4" />
+        <circle cx="18" cy="6" r="1.5" fill="currentColor" stroke="none" />
+    </svg>
+);
+
+/** Gral. Nazar 849, La Tablada (OSM Nominatim) */
+const GYM_LAT = -34.702258;
+const GYM_LNG = -58.522906;
+const MAPS_EMBED_SRC = `https://maps.google.com/maps?q=${GYM_LAT},${GYM_LNG}&z=17&hl=es&output=embed`;
+const MAPS_OPEN_URL = `https://www.google.com/maps/search/?api=1&query=${GYM_LAT},${GYM_LNG}`;
 
 const Footer = () => {
     return (
@@ -33,7 +59,8 @@ const Footer = () => {
                                     <Phone size={16} className="text-ronin-red" /> +54 11 2233-4455
                                 </a>
                                 <a href="https://instagram.com/ronin_1gym" target="_blank" rel="noreferrer" className="flex items-center gap-3 text-zinc-500 hover:text-white transition-colors text-sm">
-                                    <AtSign size={16} className="text-ronin-red" /> @ronin_1gym
+                                    <InstagramIcon size={16} className="text-ronin-red shrink-0" />
+                                    <span>@ronin_1gym</span>
                                 </a>
                             </div>
                         </div>
@@ -47,14 +74,24 @@ const Footer = () => {
                     </div>
                 </div>
 
-                {/* Google Maps Placeholder/Iframe */}
-                <div className="w-full h-80 rounded-[40px] overflow-hidden glass border border-white/10 relative group">
-                    <div className="absolute inset-0 bg-zinc-900 flex flex-col items-center justify-center text-center p-8 grayscale group-hover:grayscale-0 transition-all duration-700">
-                        <MapPin size={48} className="text-ronin-red mb-4 animate-bounce" />
-                        <h4 className="font-black italic uppercase mb-2">Google Maps Live</h4>
-                        <p className="text-xs text-zinc-600 max-w-xs">Gral. Nazar 849, La Tablada. Integración API activa en producción.</p>
-                    </div>
-                    {/* In a real scenario, use: <iframe src="https://www.google.com/maps/embed?..." ... /> */}
+                <div className="w-full h-80 rounded-[40px] overflow-hidden border border-white/10 relative bg-zinc-900 shadow-xl shadow-black/40">
+                    <iframe
+                        title="Ronin Gym — Gral. Nazar 849, La Tablada"
+                        src={MAPS_EMBED_SRC}
+                        className="absolute inset-0 w-full h-full border-0 grayscale-[0.35] contrast-[1.05] hover:grayscale-0 transition-[filter] duration-500"
+                        loading="lazy"
+                        referrerPolicy="no-referrer-when-downgrade"
+                        allowFullScreen
+                    />
+                    <a
+                        href={MAPS_OPEN_URL}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="absolute bottom-4 right-4 inline-flex items-center gap-2 px-4 py-2.5 rounded-2xl bg-black/75 backdrop-blur-md border border-white/15 text-[10px] font-black uppercase tracking-widest text-white hover:bg-ronin-red hover:border-ronin-red transition-colors"
+                    >
+                        <ExternalLink size={14} />
+                        Abrir en Google Maps
+                    </a>
                 </div>
             </div>
 
